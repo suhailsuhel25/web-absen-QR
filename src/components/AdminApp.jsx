@@ -6,9 +6,9 @@ import {
   LayoutDashboard, UserPlus, Ticket, ScanLine, FileBarChart, 
   Menu, X, Volume2, VolumeX, DoorOpen, RefreshCw, Users, 
   UserCheck, Clock, Radio, Activity, Search, Trash2, 
-  FileSpreadsheet, User2, Printer, Send, Key, Terminal, 
-  Camera, CameraOff, Video, ShieldAlert, ShieldCheck, Copy, 
-  Download, FileText, LogOut
+  FileSpreadsheet, User2, Mail, Tag, Sparkles, Printer, 
+  Send, Key, Terminal, Camera, CameraOff, Video, Battery, 
+  ShieldAlert, ShieldCheck, Copy, Download, FileText, LogOut
 } from 'lucide-react';
 import { playSound } from '../App';
 
