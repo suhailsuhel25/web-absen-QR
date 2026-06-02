@@ -869,6 +869,11 @@ button, input, select, textarea {
     font-weight: 500;
     border-radius: var(--radius-md);
     transition: var(--transition-fast);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
 }
 
 .menu-item i {
@@ -879,7 +884,7 @@ button, input, select, textarea {
 
 .menu-item:hover {
     color: var(--text-primary);
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .menu-item.active {
