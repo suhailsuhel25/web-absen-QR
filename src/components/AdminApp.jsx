@@ -648,12 +648,12 @@ export default function AdminApp({
         <div className="sidebar-header">
           <div className="logo">
             <div className="logo-icon">
-              <Ticket size={18} />
+              <Ticket size={20} />
             </div>
             <span className="logo-text">QR<span className="text-accent">Event</span></span>
           </div>
           <div className="sidebar-header-right">
-            <span className="badge-admin">ADMIN PORTAL</span>
+            <span className="badge badge-beta">ADMIN</span>
             <button className="btn-sidebar-close" onClick={() => setSidebarOpen(false)} title="Close Sidebar">
               <X size={16} />
             </button>
@@ -867,18 +867,16 @@ export default function AdminApp({
                       </div>
                     ) : (
                       checkInLogs.slice(0, 10).map((log) => (
-                        <div key={log.id} className={`feed-item feed-${log.status.toLowerCase()}`}>
-                          <div className="feed-status-dot"></div>
-                          <div className="feed-body">
-                            <div className="feed-item-header">
-                              <span className="feed-name">{log.name}</span>
-                              <span className="feed-time">{log.time.split(" ")[1]}</span>
-                            </div>
-                            <div className="feed-item-detail">
-                              <span className="font-mono">{log.token.substring(0, 12)}</span> • {log.gate}
-                            </div>
-                            <div className="feed-item-desc">{log.details}</div>
+                        <div key={log.id} className={`feed-item ${log.status.toLowerCase()}`}>
+                          <div className="feed-status-line"></div>
+                          <div className="feed-item-header">
+                            <span className="feed-name">{log.name}</span>
+                            <span className="feed-time">{log.time.split(" ")[1]}</span>
                           </div>
+                          <div className="feed-item-detail">
+                            Token: <span className="font-mono">{log.token.substring(0, 12)}</span> | Pintu: {log.gate}
+                          </div>
+                          <div className="feed-item-desc">{log.details}</div>
                         </div>
                       ))
                     )}
