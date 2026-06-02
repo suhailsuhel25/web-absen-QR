@@ -8,7 +8,7 @@ import {
   UserCheck, Clock, Radio, Activity, Search, Trash2, 
   FileSpreadsheet, User2, Printer, Send, Key, Terminal, 
   Camera, CameraOff, Video, ShieldAlert, ShieldCheck, Copy, 
-  Download, FileText
+  Download, FileText, LogOut
 } from 'lucide-react';
 import { playSound } from '../App';
 
