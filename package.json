@@ -12,7 +12,7 @@
     "@supabase/supabase-js": "^2.43.4",
     "chart.js": "^4.4.3",
     "jsqr": "^1.4.0",
-    "lucide-react": "^0.395.0",
+    "lucide-react": "^0.475.0",
     "qrcode": "^1.5.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
