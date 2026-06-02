@@ -1,12 +1,12 @@
 import fs from 'fs';
 
-// Read from Netlify's environment variables
-const url = process.env.SUPABASE_URL || 'https://sxgjhivrclawaxqtphge.supabase.co';
-const key = process.env.SUPABASE_KEY || '';
+// Read from Netlify's environment variables (support both prefixed and non-prefixed for safety)
+const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://sxgjhivrclawaxqtphge.supabase.co';
+const key = process.env.VITE_SUPABASE_KEY || process.env.SUPABASE_KEY || '';
 
 // Write to .env file in the build directory
-const content = `SUPABASE_URL=${url}
-SUPABASE_KEY=${key}
+const content = `VITE_SUPABASE_URL=${url}
+VITE_SUPABASE_KEY=${key}
 `;
 
 fs.writeFileSync('.env', content);
