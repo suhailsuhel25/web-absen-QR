@@ -1,6 +1,6 @@
 # Environment variables
 .env
-config.json
+public/config.json
 
 # Dependency directories
 node_modules/

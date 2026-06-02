@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 // Read from Netlify's environment variables
 const url = process.env.SUPABASE_URL || 'https://sxgjhivrclawaxqtphge.supabase.co';
@@ -12,11 +12,11 @@ SUPABASE_KEY=${key}
 fs.writeFileSync('.env', content);
 console.log('.env file generated successfully!');
 
-// Write to config.json file in the build directory for Netlify frontend access
+// Write to config.json file in the public directory for Vite dev and production builds
 const configContent = JSON.stringify({
     SUPABASE_URL: url,
     SUPABASE_KEY: key
 }, null, 2);
 
-fs.writeFileSync('config.json', configContent);
-console.log('config.json file generated successfully!');
+fs.writeFileSync('public/config.json', configContent);
+console.log('public/config.json file generated successfully!');
