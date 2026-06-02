@@ -10,4 +10,13 @@ SUPABASE_KEY=${key}
 `;
 
 fs.writeFileSync('.env', content);
-console.log('.env file generated successfully from build environment variables!');
+console.log('.env file generated successfully!');
+
+// Write to config.json file in the build directory for Netlify frontend access
+const configContent = JSON.stringify({
+    SUPABASE_URL: url,
+    SUPABASE_KEY: key
+}, null, 2);
+
+fs.writeFileSync('config.json', configContent);
+console.log('config.json file generated successfully!');

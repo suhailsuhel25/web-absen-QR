@@ -57,8 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Load environment variables from .env file asynchronously (served by static server)
+    // Load environment variables from config.json or fallback to .env file asynchronously
     async function loadEnv() {
+        // Try loading config.json first (preferred for Netlify deployment)
+        try {
+            const response = await fetch('/config.json');
+            if (response.ok) {
+                const config = await response.json();
+                console.log("Environment variables loaded from config.json");
+                return config;
+            }
+        } catch (e) {
+            console.warn("Could not load config.json, trying .env file:", e);
+        }
+
+        // Fallback to loading .env (used for local development)
         try {
             const response = await fetch('/.env');
             if (!response.ok) return null;
@@ -74,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     env[key] = value;
                 }
             });
+            console.log("Environment variables loaded from .env");
             return env;
         } catch (e) {
             console.warn("Failed to load .env file:", e);
@@ -104,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Supabase init error:", err);
             }
         } else {
-            console.warn("Supabase Anon Key is missing from .env and localStorage.");
+            console.warn("Supabase Anon Key is missing from config.json or .env.");
         }
     }
 
