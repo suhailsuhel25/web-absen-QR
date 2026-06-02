@@ -927,7 +927,7 @@ export default function AdminApp({
                     <div className="form-group">
                       <label htmlFor="reg-name">Nama Lengkap</label>
                       <div className="input-wrapper">
-                        <User className="input-icon" size={16} />
+                        <User2 className="input-icon" size={16} />
                         <input 
                           type="text" 
                           id="reg-name" 
