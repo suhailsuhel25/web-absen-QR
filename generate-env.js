@@ -1,4 +1,12 @@
 import fs from 'fs';
+import path from 'path';
+
+// Ensure public directory exists
+const publicDir = path.join(process.cwd(), 'public');
+if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+    console.log('Created public directory');
+}
 
 // Read from Netlify's environment variables (support both prefixed and non-prefixed for safety)
 const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://sxgjhivrclawaxqtphge.supabase.co';
