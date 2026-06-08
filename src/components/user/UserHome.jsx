@@ -26,16 +26,100 @@ export default function UserHome({ currentUser, handleLogout }) {
   const handleDownloadQR = () => {
     if (canvasRef.current) {
       try {
-        const url = canvasRef.current.toDataURL("image/png");
+        // Create an in-memory canvas for the receipt ticket
+        const ticketCanvas = document.createElement("canvas");
+        ticketCanvas.width = 400;
+        ticketCanvas.height = 600;
+        const ctx = ticketCanvas.getContext("2d");
+
+        // 1. Draw Background (Off-white Receipt Paper)
+        ctx.fillStyle = "#f8fafc";
+        ctx.fillRect(0, 0, ticketCanvas.width, ticketCanvas.height);
+
+        // Draw header background (Dark slate banner)
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(0, 0, ticketCanvas.width, 100);
+
+        // 2. Draw Header Typography
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        
+        ctx.font = "bold 24px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillText("EXPO EVENT 2026", ticketCanvas.width / 2, 48);
+
+        ctx.font = "600 12px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillStyle = "#cbd5e1";
+        ctx.fillText("CONFERENCE ENTRY TICKET", ticketCanvas.width / 2, 74);
+
+        // 3. Draw Ticket Info Section
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#0f172a";
+        
+        ctx.font = "bold 13px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillText("TICKET INFORMATION", 35, 148);
+        
+        ctx.font = "500 12px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillStyle = "#475569";
+        ctx.fillText("Date: Oct 14-16, 2026", 35, 171);
+        ctx.fillText("Location: Jakarta Convention Center", 35, 191);
+
+        // 4. Draw Participant Info Section
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "bold 13px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillText("PARTICIPANT DETAILS", 35, 233);
+        
+        ctx.font = "500 12px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillStyle = "#475569";
+        ctx.fillText(`Name:     ${currentUser.name || "-"}`, 35, 256);
+        ctx.fillText(`Gender:   ${currentUser.gender || "-"}`, 35, 276);
+        ctx.fillText(`Phone:    ${currentUser.phone || "-"}`, 35, 296);
+
+        // 5. Draw Dotted Tear Line with side notches
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 6]);
+        ctx.beginPath();
+        ctx.moveTo(20, 110);
+        ctx.lineTo(ticketCanvas.width - 20, 110);
+        ctx.stroke();
+        ctx.setLineDash([]); // Reset line dash
+
+        // Draw Notch cuts (transparent circle slices)
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(0, 110, 8, 0, Math.PI * 2);
+        ctx.arc(ticketCanvas.width, 110, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalCompositeOperation = "source-over"; // Reset composite operation
+
+        // 6. Draw QR Code
+        const qrSize = 160;
+        const qrX = (ticketCanvas.width - qrSize) / 2;
+        const qrY = 325;
+        ctx.drawImage(canvasRef.current, qrX, qrY, qrSize, qrSize);
+
+        // 7. Draw Token & Footer details
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "bold 20px 'Courier New', monospace";
+        ctx.fillText(currentUser.token || "-", ticketCanvas.width / 2, 510);
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = "500 10px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillText("*This ticket is valid for single entry only.", ticketCanvas.width / 2, 545);
+        ctx.fillText("www.expoevent2026.com", ticketCanvas.width / 2, 565);
+
+        // Convert canvas to image and trigger download
+        const url = ticketCanvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.href = url;
         const safeName = currentUser.name ? currentUser.name.replace(/\s+/g, "_").toLowerCase() : 'user';
-        link.download = `tiket_qr_${safeName}_${currentUser.token}.png`;
+        link.download = `tiket_receipt_${safeName}_${currentUser.token}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       } catch (err) {
-        console.error("Gagal mengunduh QR Code:", err);
+        console.error("Gagal mengunduh Struk E-Tiket:", err);
       }
     }
   };
