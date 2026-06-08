@@ -4,6 +4,7 @@ import AdminHeader from './admin/AdminHeader';
 import AdminDashboard from './admin/AdminDashboard';
 import AdminScanner from './admin/AdminScanner';
 import AdminReports from './admin/AdminReports';
+import AdminGates from './admin/AdminGates';
 import GateSelectorModal from './admin/GateSelectorModal';
 import { playSound } from '../App';
 
@@ -22,6 +23,8 @@ export default function AdminApp({
   offlineQueue,
   setOfflineQueue,
   isSyncing,
+  gatesList,
+  setGatesList,
   showToast,
   fetchDatabaseData,
   onLogoutAdmin
@@ -31,12 +34,12 @@ export default function AdminApp({
   const [showGateSelector, setShowGateSelector] = useState(true);
 
   // Core Check-In database and local state synchronization logic
-  const handleCheckIn = async (token, gate) => {
-    const cleanToken = token.trim();
-    if (!cleanToken) return;
+  const handleCheckIn = async (tokenOrPhone, gate) => {
+    const cleanInput = tokenOrPhone.trim();
+    if (!cleanInput) return;
 
-    // Search attendee in loaded state
-    const participant = participants.find(p => p.token === cleanToken);
+    // Search attendee in loaded state by token or phone number
+    const participant = participants.find(p => p.token === cleanInput || p.phone === cleanInput);
 
     // 1. INVALID CODE ERROR
     if (!participant) {
@@ -45,18 +48,20 @@ export default function AdminApp({
         try {
           await supabase.from('check_in_logs').insert([{
             participant_name: "TIKET INVALID",
-            ticket_token: cleanToken,
+            ticket_token: cleanInput,
             gate: gate,
             status: "ERROR",
-            details: `Token '${cleanToken}' tidak terdaftar di database.`
+            details: `Token/No HP '${cleanInput}' tidak terdaftar di database.`
           }]);
         } catch (err) {
           console.error("Failed to log invalid check-in:", err);
         }
       }
-      showToast("Scan Error", "Tiket tidak terdaftar di database peserta.", "error");
+      showToast("Scan Error", "Identitas/No HP tidak terdaftar di database peserta.", "error");
       return;
     }
+
+    const actualToken = participant.token;
 
     // 2. GENDER MISMATCH ERROR
     const isMaleGate = gate.includes("(Laki-laki)");
@@ -72,7 +77,7 @@ export default function AdminApp({
         try {
           await supabase.from('check_in_logs').insert([{
             participant_name: participant.name,
-            ticket_token: cleanToken,
+            ticket_token: actualToken,
             gate: gate,
             status: "ERROR",
             details: `BLOCKED: Salah Pintu (Gender Mismatch). Peserta ${participant.gender} di ${gate}.`
@@ -86,7 +91,7 @@ export default function AdminApp({
     }
 
     const isAlreadyChecked = participant.checked_in || participant.checkInTime !== null;
-    const isOfflineDuplicate = offlineQueue.some(q => q.token === cleanToken);
+    const isOfflineDuplicate = offlineQueue.some(q => q.token === actualToken);
 
     // 2. DUPLICATE CHECK-IN ERROR
     if (isAlreadyChecked || isOfflineDuplicate) {
@@ -98,7 +103,7 @@ export default function AdminApp({
         try {
           await supabase.from('check_in_logs').insert([{
             participant_name: participant.name,
-            ticket_token: cleanToken,
+            ticket_token: actualToken,
             gate: gate,
             status: "DUPLICATE",
             details: `Percobaan scan ulang di ${gate}. Sebelumnya terdaftar di ${prevGate}.`
@@ -130,7 +135,7 @@ export default function AdminApp({
           // Add log
           await supabase.from('check_in_logs').insert([{
             participant_name: participant.name,
-            ticket_token: cleanToken,
+            ticket_token: actualToken,
             gate: gate,
             status: "SUCCESS",
             details: `Check-in berhasil di ${gate}`
@@ -166,7 +171,7 @@ export default function AdminApp({
           id: Date.now(),
           time: new Date(timeString).toLocaleString("id-ID"),
           name: participant.name,
-          token: cleanToken,
+          token: actualToken,
           gate: gate,
           status: "SUCCESS",
           details: `Check-in Offline (Tersimpan Lokal)`
@@ -180,7 +185,7 @@ export default function AdminApp({
         {
           id: participant.id,
           name: participant.name,
-          token: cleanToken,
+          token: actualToken,
           gate: gate,
           time: timeString
         }
@@ -218,6 +223,7 @@ export default function AdminApp({
             <AdminDashboard
               participants={participants}
               checkInLogs={checkInLogs}
+              gatesList={gatesList}
             />
           )}
 
@@ -239,11 +245,22 @@ export default function AdminApp({
               showToast={showToast}
             />
           )}
+
+          {activeTab === 'gates' && (
+            <AdminGates
+              gatesList={gatesList}
+              setGatesList={setGatesList}
+              selectedGate={selectedGate}
+              setSelectedGate={setSelectedGate}
+              showToast={showToast}
+            />
+          )}
         </div>
       </main>
       {showGateSelector && (
         <GateSelectorModal
           currentGate={selectedGate}
+          gatesList={gatesList}
           onConfirm={(gate) => {
             setSelectedGate(gate);
             setShowGateSelector(false);

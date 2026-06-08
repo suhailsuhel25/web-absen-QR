@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import jsQR from 'jsqr';
 import { 
   Terminal, Camera, Key, Battery, Activity, ShieldCheck, Copy, ShieldAlert, 
-  CameraOff, Video, X 
+  CameraOff, Video, X, Phone 
 } from 'lucide-react';
 import { playSound } from '../../App';
 
@@ -142,7 +142,7 @@ export default function AdminScanner({
     await handleCheckIn(token, selectedGate);
     
     // Determine the result state by looking at participant list
-    const participant = participants.find(p => p.token === token.trim());
+    const participant = participants.find(p => p.token === token.trim() || p.phone === token.trim());
     if (!participant) {
       setScanResult({
         status: 'error',
@@ -244,15 +244,15 @@ export default function AdminScanner({
             <div className="scan-mode-content active" id="scan-mode-simulator">
               <div className="simulator-layout">
                 <div className="simulator-input-box">
-                  <h4>Input Token / Scan Simulator</h4>
-                  <p className="subtext">Simulasikan scan instan dengan memasukkan token manual atau memilih dari list cepat.</p>
+                  <h4>Input No HP / Scan Simulator</h4>
+                  <p className="subtext">Simulasikan scan instan dengan memasukkan nomor HP manual atau memilih dari list cepat.</p>
                   
                   <div className="input-group">
                     <div className="input-wrapper search-wrapper">
-                      <Key className="input-icon" size={16} />
+                      <Phone className="input-icon" size={16} />
                       <input 
                         type="text" 
-                        placeholder="Masukkan Token (Contoh: TKT-REG-...)"
+                        placeholder="Masukkan No HP (Contoh: 08123456789)"
                         value={manualToken}
                         onChange={(e) => setManualToken(e.target.value)}
                       />
@@ -264,12 +264,12 @@ export default function AdminScanner({
                         setManualToken('');
                       }}
                     >
-                      Scan Token
+                      Scan No HP
                     </button>
                   </div>
                   
                   <div className="quick-pick-participants-section">
-                    <h5>List Tiket Cepat (Klik untuk mensimulasikan scan)</h5>
+                    <h5>List No HP Cepat (Klik untuk mensimulasikan scan)</h5>
                     <div className="quick-pick-grid">
                       {participants.length === 0 ? (
                         <div className="empty-state">Load data peserta terlebih dahulu.</div>
@@ -278,10 +278,10 @@ export default function AdminScanner({
                           <button 
                             key={p.id}
                             className={`btn-quick-pick ${p.checked_in ? 'checked' : ''}`}
-                            onClick={() => triggerLocalCheckIn(p.token)}
+                            onClick={() => triggerLocalCheckIn(p.phone || '')}
                           >
                             <span className="pick-name">{p.name}</span>
-                            <span className="pick-token font-mono">{p.token.split("-")[2]}</span>
+                            <span className="pick-token font-mono">{p.phone || 'No HP'}</span>
                           </button>
                         ))
                       )}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { DoorOpen, User, Users } from 'lucide-react';
 
-export default function GateSelectorModal({ currentGate, onConfirm }) {
-  const [selected, setSelected] = useState(currentGate || "Gate A (Laki-laki)");
+export default function GateSelectorModal({ currentGate, onConfirm, gatesList = [] }) {
+  const [selected, setSelected] = useState(currentGate || (gatesList[0]?.id || "Gate A (Laki-laki)"));
   
-  const gates = [
+  const gates = gatesList.length > 0 ? gatesList : [
     { id: "Gate A (Laki-laki)", name: "Gate A", type: "Laki-laki" },
     { id: "Gate A (Perempuan)", name: "Gate A", type: "Perempuan" },
     { id: "Gate B (Laki-laki)", name: "Gate B", type: "Laki-laki" },

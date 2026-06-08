@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ticket, X, LayoutDashboard, ScanLine, FileBarChart, LogOut } from 'lucide-react';
+import { Ticket, X, LayoutDashboard, ScanLine, FileBarChart, LogOut, DoorOpen } from 'lucide-react';
 
 export default function AdminSidebar({
   activeTab,
@@ -56,6 +56,14 @@ export default function AdminSidebar({
           >
             <FileBarChart size={18} />
             <span>Laporan & Export</span>
+          </button>
+
+          <button 
+            className={`menu-item ${activeTab === 'gates' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('gates'); setSidebarOpen(false); }}
+          >
+            <DoorOpen size={18} />
+            <span>Manajemen Gate</span>
           </button>
         </nav>
 

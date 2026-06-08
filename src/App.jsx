@@ -87,6 +87,29 @@ export default function App() {
 
   const [isSyncing, setIsSyncing] = useState(false);
 
+  const [gatesList, setGatesList] = useState(() => {
+    try {
+      const val = localStorage.getItem("qrevent_gates_list");
+      return val !== null ? JSON.parse(val) : [
+        { id: "Gate A (Laki-laki)", name: "Gate A", type: "Laki-laki" },
+        { id: "Gate A (Perempuan)", name: "Gate A", type: "Perempuan" },
+        { id: "Gate B (Laki-laki)", name: "Gate B", type: "Laki-laki" },
+        { id: "Gate B (Perempuan)", name: "Gate B", type: "Perempuan" },
+        { id: "Gate C (Laki-laki)", name: "Gate C", type: "Laki-laki" },
+        { id: "Gate C (Perempuan)", name: "Gate C", type: "Perempuan" }
+      ];
+    } catch {
+      return [
+        { id: "Gate A (Laki-laki)", name: "Gate A", type: "Laki-laki" },
+        { id: "Gate A (Perempuan)", name: "Gate A", type: "Perempuan" },
+        { id: "Gate B (Laki-laki)", name: "Gate B", type: "Laki-laki" },
+        { id: "Gate B (Perempuan)", name: "Gate B", type: "Perempuan" },
+        { id: "Gate C (Laki-laki)", name: "Gate C", type: "Laki-laki" },
+        { id: "Gate C (Perempuan)", name: "Gate C", type: "Perempuan" }
+      ];
+    }
+  });
+
   // Custom Toast System state
   const [toasts, setToasts] = useState([]);
   const showToast = (title, message, type = 'info') => {
@@ -113,6 +136,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("qrevent_offline_queue", JSON.stringify(offlineQueue));
   }, [offlineQueue]);
+
+  useEffect(() => {
+    localStorage.setItem("qrevent_gates_list", JSON.stringify(gatesList));
+  }, [gatesList]);
 
   // Load configuration and initialize Supabase
   useEffect(() => {
@@ -201,6 +228,7 @@ export default function App() {
         name: p.name,
         email: p.email,
         token: p.ticket_token,
+        phone: p.phone,
         gender: p.gender,
         checked_in: p.checked_in,
         checkedIn: p.checked_in,
@@ -436,6 +464,8 @@ export default function App() {
           offlineQueue={offlineQueue}
           setOfflineQueue={setOfflineQueue}
           isSyncing={isSyncing}
+          gatesList={gatesList}
+          setGatesList={setGatesList}
           showToast={showToast}
           fetchDatabaseData={fetchDatabaseData}
           onLogoutAdmin={() => setRole('landing')}

@@ -1292,7 +1292,7 @@ button, input, select, textarea {
  * DASHBOARD CARDS & GRIDS
  * ------------------------------------------------------------- */
 .tab-content-container {
-    padding: 0 40px 40px 40px;
+    padding: 32px 40px 40px 40px;
     flex-grow: 1;
     overflow-y: visible;
 }
@@ -2922,7 +2922,7 @@ button, input, select, textarea {
         padding: 16px 24px;
     }
     .tab-content-container {
-        padding: 0 24px 24px 24px;
+        padding: 24px 24px 24px 24px;
     }
     .chart-flex-wrapper {
         flex-direction: column;

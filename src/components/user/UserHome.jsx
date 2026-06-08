@@ -45,11 +45,11 @@ export default function UserHome({ currentUser, handleLogout }) {
         ctx.textAlign = "center";
         
         ctx.font = "bold 24px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText("EXPO EVENT 2026", ticketCanvas.width / 2, 48);
+        ctx.fillText("Matholek fest 2026", ticketCanvas.width / 2, 48);
 
         ctx.font = "600 12px 'Plus Jakarta Sans', sans-serif";
         ctx.fillStyle = "#cbd5e1";
-        ctx.fillText("CONFERENCE ENTRY TICKET", ticketCanvas.width / 2, 74);
+        ctx.fillText("FESTIVAL ENTRY TICKET", ticketCanvas.width / 2, 74);
 
         // 3. Draw Ticket Info Section
         ctx.textAlign = "left";
@@ -60,19 +60,18 @@ export default function UserHome({ currentUser, handleLogout }) {
         
         ctx.font = "500 12px 'Plus Jakarta Sans', sans-serif";
         ctx.fillStyle = "#475569";
-        ctx.fillText("Date: Oct 14-16, 2026", 35, 171);
-        ctx.fillText("Location: Jakarta Convention Center", 35, 191);
+        ctx.fillText("Location: Kajen, Margoyoso, Pati", 35, 171);
 
         // 4. Draw Participant Info Section
         ctx.fillStyle = "#0f172a";
         ctx.font = "bold 13px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText("PARTICIPANT DETAILS", 35, 233);
+        ctx.fillText("PARTICIPANT DETAILS", 35, 215);
         
         ctx.font = "500 12px 'Plus Jakarta Sans', sans-serif";
         ctx.fillStyle = "#475569";
-        ctx.fillText(`Name:     ${currentUser.name || "-"}`, 35, 256);
-        ctx.fillText(`Gender:   ${currentUser.gender || "-"}`, 35, 276);
-        ctx.fillText(`Phone:    ${currentUser.phone || "-"}`, 35, 296);
+        ctx.fillText(`Name:     ${currentUser.name || "-"}`, 35, 238);
+        ctx.fillText(`Gender:   ${currentUser.gender || "-"}`, 35, 258);
+        ctx.fillText(`Phone:    ${currentUser.phone || "-"}`, 35, 278);
 
         // 5. Draw Dotted Tear Line with side notches
         ctx.strokeStyle = "#cbd5e1";
@@ -95,19 +94,18 @@ export default function UserHome({ currentUser, handleLogout }) {
         // 6. Draw QR Code
         const qrSize = 160;
         const qrX = (ticketCanvas.width - qrSize) / 2;
-        const qrY = 325;
+        const qrY = 310;
         ctx.drawImage(canvasRef.current, qrX, qrY, qrSize, qrSize);
 
         // 7. Draw Token & Footer details
         ctx.textAlign = "center";
         ctx.fillStyle = "#0f172a";
         ctx.font = "bold 20px 'Courier New', monospace";
-        ctx.fillText(currentUser.token || "-", ticketCanvas.width / 2, 510);
+        ctx.fillText(currentUser.token || "-", ticketCanvas.width / 2, 495);
 
         ctx.fillStyle = "#64748b";
         ctx.font = "500 10px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText("*This ticket is valid for single entry only.", ticketCanvas.width / 2, 545);
-        ctx.fillText("www.expoevent2026.com", ticketCanvas.width / 2, 565);
+        ctx.fillText("*This ticket is valid for single entry only.", ticketCanvas.width / 2, 535);
 
         // Convert canvas to image and trigger download
         const url = ticketCanvas.toDataURL("image/png");
@@ -137,7 +135,7 @@ export default function UserHome({ currentUser, handleLogout }) {
       <header className="android-app-header">
         <div className="android-app-logo">
           <Sparkles size={16} style={{ marginRight: '4px' }} />
-          <span>EXPO 2026</span>
+          <span>Matholek fest 2026</span>
         </div>
         <button className="btn-logout-icon" onClick={handleLogout} title="Log Out">
           <LogOut size={16} />
@@ -157,8 +155,8 @@ export default function UserHome({ currentUser, handleLogout }) {
           <div className="mobile-ticket">
             <div className="mobile-ticket-header">
               <div>
-                <span className="event-tag">CONFERENCE TICKET</span>
-                <h4 className="event-title">EXPO EVENT 2026</h4>
+                <span className="event-tag">FESTIVAL TICKET</span>
+                <h4 className="event-title">Matholek fest 2026</h4>
               </div>
             </div>
 

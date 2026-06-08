@@ -6,7 +6,8 @@ Chart.register(...registerables);
 
 export default function AdminDashboard({
   participants,
-  checkInLogs
+  checkInLogs,
+  gatesList = []
 }) {
   const doughnutCanvasRef = useRef(null);
   const barCanvasRef = useRef(null);
@@ -48,14 +49,10 @@ export default function AdminDashboard({
 
     // 2. Bar Chart Data (Check-ins per gate)
     const successLogs = checkInLogs.filter(l => l.status === 'SUCCESS');
-    const gateCounts = {
-      "Gate A (Laki-laki)": 0,
-      "Gate A (Perempuan)": 0,
-      "Gate B (Laki-laki)": 0,
-      "Gate B (Perempuan)": 0,
-      "Gate C (Laki-laki)": 0,
-      "Gate C (Perempuan)": 0
-    };
+    const gateCounts = {};
+    gatesList.forEach(g => {
+      gateCounts[g.id] = 0;
+    });
     successLogs.forEach(log => {
       if (gateCounts[log.gate] !== undefined) {
         gateCounts[log.gate]++;
@@ -67,18 +64,11 @@ export default function AdminDashboard({
       barChartRef.current = new Chart(barCanvasRef.current, {
         type: "bar",
         data: {
-          labels: ["Gate A (L)", "Gate A (P)", "Gate B (L)", "Gate B (P)", "Gate C (L)", "Gate C (P)"],
+          labels: gatesList.map(g => `${g.name} (${g.type === 'Laki-laki' ? 'L' : 'P'})`),
           datasets: [{
             label: "Check-ins",
-            data: [
-              gateCounts["Gate A (Laki-laki)"],
-              gateCounts["Gate A (Perempuan)"],
-              gateCounts["Gate B (Laki-laki)"],
-              gateCounts["Gate B (Perempuan)"],
-              gateCounts["Gate C (Laki-laki)"],
-              gateCounts["Gate C (Perempuan)"]
-            ],
-            backgroundColor: ["#3b82f6", "#ec4899", "#2563eb", "#db2777", "#1d4ed8", "#be185d"],
+            data: gatesList.map(g => gateCounts[g.id] || 0),
+            backgroundColor: gatesList.map(g => g.type === 'Laki-laki' ? '#3b82f6' : '#ec4899'),
             borderRadius: 6,
             borderWidth: 0
           }]
@@ -106,7 +96,7 @@ export default function AdminDashboard({
       if (doughnutChartRef.current) doughnutChartRef.current.destroy();
       if (barChartRef.current) barChartRef.current.destroy();
     };
-  }, [participants, checkInLogs]);
+  }, [participants, checkInLogs, gatesList]);
 
   return (
     <section className="tab-pane active" id="dashboard-tab">
@@ -159,7 +149,7 @@ export default function AdminDashboard({
           </div>
           <div className="metric-info">
             <span className="metric-label">Active Gates</span>
-            <h3 className="metric-val">6</h3>
+            <h3 className="metric-val">{gatesList.length}</h3>
             <span className="metric-subtext">Receiving live scans</span>
           </div>
         </div>

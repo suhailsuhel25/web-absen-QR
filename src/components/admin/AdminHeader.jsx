@@ -21,11 +21,13 @@ export default function AdminHeader({
             {activeTab === 'dashboard' && 'Dashboard Overview'}
             {activeTab === 'scanner' && 'Scanner Kehadiran'}
             {activeTab === 'reports' && 'Laporan Check-in'}
+            {activeTab === 'gates' && 'Manajemen Pintu Gerbang'}
           </h1>
           <p>
             {activeTab === 'dashboard' && 'Real-time event analytics and simulation diagnostics.'}
             {activeTab === 'scanner' && 'Scan codes via camera or virtual token inputs.'}
             {activeTab === 'reports' && 'View, search, and export check-in logs.'}
+            {activeTab === 'gates' && 'Kelola pintu gerbang masuk secara manual.'}
           </p>
         </div>
       </div>
