@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DoorOpen, Plus, Trash2, User, Users } from 'lucide-react';
 
 export default function AdminGates({
+  supabase,
   gatesList,
   setGatesList,
   selectedGate,
@@ -11,7 +12,7 @@ export default function AdminGates({
   const [gateName, setGateName] = useState('');
   const [genderType, setGenderType] = useState('Laki-laki');
 
-  const handleAddGate = (e) => {
+  const handleAddGate = async (e) => {
     e.preventDefault();
     const name = gateName.trim();
     if (!name) {
@@ -34,15 +35,46 @@ export default function AdminGates({
       type: genderType
     };
 
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from('gates')
+          .insert([newGate]);
+        if (error) {
+          showToast("Gagal Menyimpan", "Gagal menyimpan ke DB: " + error.message, "error");
+          return;
+        }
+      } catch (err) {
+        showToast("Error Koneksi", "Gagal menyambung ke database.", "error");
+        return;
+      }
+    }
+
     setGatesList(prev => [...prev, newGate]);
     showToast("Gerbang Ditambahkan", `"${newGateId}" berhasil ditambahkan ke sistem.`, "success");
     setGateName('');
   };
 
-  const handleDeleteGate = (idToDelete) => {
+  const handleDeleteGate = async (idToDelete) => {
     if (gatesList.length <= 1) {
       showToast("Hapus Ditolak", "Harus ada minimal satu gerbang yang aktif di dalam sistem.", "error");
       return;
+    }
+
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from('gates')
+          .delete()
+          .eq('id', idToDelete);
+        if (error) {
+          showToast("Gagal Menghapus", "Gagal menghapus dari DB: " + error.message, "error");
+          return;
+        }
+      } catch (err) {
+        showToast("Error Koneksi", "Gagal menyambung ke database.", "error");
+        return;
+      }
     }
 
     const updatedGates = gatesList.filter(g => g.id !== idToDelete);

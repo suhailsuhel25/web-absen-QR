@@ -214,6 +214,45 @@ export default function App() {
     checkUser();
   }, [supabase]);
 
+  // Load and subscribe to gates from Supabase
+  useEffect(() => {
+    if (!supabase) return;
+
+    const fetchGates = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('gates')
+          .select('*')
+          .order('created_at', { ascending: true });
+        
+        if (!error && data && data.length > 0) {
+          setGatesList(data.map(g => ({
+            id: g.id,
+            name: g.name,
+            type: g.type
+          })));
+        } else if (error) {
+          console.warn("Table 'gates' query failed (might not exist yet). Falling back to local storage.", error);
+        }
+      } catch (err) {
+        console.warn("Exception while fetching gates:", err);
+      }
+    };
+
+    fetchGates();
+
+    // Set up realtime channel to sync gates database table
+    const gatesChannel = supabase.channel('schema-db-gates')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'gates' }, () => {
+        fetchGates();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(gatesChannel);
+    };
+  }, [supabase]);
+
   // Fetch Database Data for Admin Dashboard
   const fetchDatabaseData = async () => {
     if (!supabase) return;

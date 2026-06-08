@@ -248,6 +248,7 @@ export default function AdminApp({
 
           {activeTab === 'gates' && (
             <AdminGates
+              supabase={supabase}
               gatesList={gatesList}
               setGatesList={setGatesList}
               selectedGate={selectedGate}
