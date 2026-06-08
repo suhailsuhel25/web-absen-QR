@@ -428,6 +428,8 @@ button, input, select, textarea {
     gap: 6px;
     align-self: center;
     transition: var(--transition-fast);
+    margin-top: 24px;
+    margin-bottom: 16px;
 }
 
 .btn-back-to-landing:hover {
@@ -3006,4 +3008,138 @@ button, input, select, textarea {
     display: flex;
     flex-direction: column;
     animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Gate Selector Modal Styles */
+.gate-selector-card {
+    background: rgba(30, 41, 59, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg, 16px);
+    width: 90%;
+    max-width: 500px;
+    padding: 32px 28px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gate-selector-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.gate-logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #6366f1;
+    border-radius: 50%;
+    margin-bottom: 16px;
+}
+
+.gate-selector-header h3 {
+    color: #f8fafc;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.gate-selector-header p {
+    color: #94a3b8;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.gate-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.gate-option-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s ease;
+}
+
+.gate-option-btn:hover {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.gate-info-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.gate-name-label {
+    color: #f1f5f9;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.gate-gender-tag {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.gate-icon-right {
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Active states for Laki-laki and Perempuan gate cards */
+.gate-option-btn.male-gate.active {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: #3b82f6;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+}
+
+.gate-option-btn.male-gate.active .gate-name-label {
+    color: #3b82f6;
+}
+
+.gate-option-btn.male-gate.active .gate-gender-tag,
+.gate-option-btn.male-gate.active .gate-icon-right {
+    color: #60a5fa;
+}
+
+.gate-option-btn.female-gate.active {
+    background: rgba(236, 72, 153, 0.12);
+    border-color: #ec4899;
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.25);
+}
+
+.gate-option-btn.female-gate.active .gate-name-label {
+    color: #ec4899;
+}
+
+.gate-option-btn.female-gate.active .gate-gender-tag,
+.gate-option-btn.female-gate.active .gate-icon-right {
+    color: #f472b6;
+}
+
+.gate-confirm-btn {
+    margin-top: 24px;
+    padding: 12px;
+    font-weight: 600;
 }

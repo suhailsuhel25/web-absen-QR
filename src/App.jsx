@@ -48,6 +48,8 @@ export const playSound = (type, soundEnabled) => {
   }
 };
 
+let supabaseInstance = null;
+
 export default function App() {
   const [role, setRole] = useState('landing'); // 'landing', 'user', 'admin'
   const [supabase, setSupabase] = useState(null);
@@ -67,7 +69,7 @@ export default function App() {
     } catch { return true; }
   });
   const [selectedGate, setSelectedGate] = useState(() => {
-    return localStorage.getItem("qrevent_gate") || "Gate A";
+    return localStorage.getItem("qrevent_gate") || "Gate A (Laki-laki)";
   });
   const [soundEnabled, setSoundEnabled] = useState(() => {
     try {
@@ -135,10 +137,12 @@ export default function App() {
 
       if (key && key !== "PASTE_YOUR_SUPABASE_ANON_KEY_HERE") {
         try {
-          const client = createClient(url, key);
-          setSupabase(client);
+          if (!supabaseInstance) {
+            supabaseInstance = createClient(url, key);
+            console.log("Supabase Client initialized successfully.");
+          }
+          setSupabase(supabaseInstance);
           setSupabaseConfig({ url, key });
-          console.log("Supabase Client initialized successfully.");
         } catch (err) {
           console.error("Supabase init error:", err);
         }
@@ -168,7 +172,6 @@ export default function App() {
               id: profile.id,
               name: profile.name,
               email: profile.email,
-              ticketType: profile.ticket_type,
               token: profile.ticket_token,
               checked_in: profile.checked_in,
               check_in_time: profile.check_in_time,
@@ -197,8 +200,8 @@ export default function App() {
         id: p.id,
         name: p.name,
         email: p.email,
-        ticketType: p.ticket_type,
         token: p.ticket_token,
+        gender: p.gender,
         checked_in: p.checked_in,
         checkedIn: p.checked_in,
         check_in_time: p.check_in_time,
