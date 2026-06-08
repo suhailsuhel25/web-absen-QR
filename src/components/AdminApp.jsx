@@ -209,7 +209,6 @@ export default function AdminApp({
           soundEnabled={soundEnabled}
           setSoundEnabled={setSoundEnabled}
           selectedGate={selectedGate}
-          setSelectedGate={setSelectedGate}
           offlineQueue={offlineQueue}
           isSyncing={isSyncing}
         />

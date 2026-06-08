@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
-import { Sparkles, LogOut, Ticket, User, Clock } from 'lucide-react';
+import { Sparkles, LogOut, Ticket, User, Clock, Download } from 'lucide-react';
 import UserProfile from './UserProfile';
 
 export default function UserHome({ currentUser, handleLogout }) {
@@ -22,6 +22,23 @@ export default function UserHome({ currentUser, handleLogout }) {
       });
     }
   }, [currentUser?.token, userTab]);
+
+  const handleDownloadQR = () => {
+    if (canvasRef.current) {
+      try {
+        const url = canvasRef.current.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = url;
+        const safeName = currentUser.name ? currentUser.name.replace(/\s+/g, "_").toLowerCase() : 'user';
+        link.download = `tiket_qr_${safeName}_${currentUser.token}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        console.error("Gagal mengunduh QR Code:", err);
+      }
+    }
+  };
 
   const getStatusText = () => {
     return currentUser?.checked_in ? "Sudah Hadir" : "Belum Hadir";
@@ -83,6 +100,22 @@ export default function UserHome({ currentUser, handleLogout }) {
               )}
             </div>
           </div>
+
+          <button 
+            className="btn btn-secondary btn-sm btn-icon btn-block mt-3"
+            onClick={handleDownloadQR}
+            style={{ 
+              maxWidth: '180px', 
+              margin: '16px auto 0 auto', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              gap: '6px'
+            }}
+          >
+            <Download size={14} />
+            <span>Unduh QR Tiket</span>
+          </button>
         </div>
       ) : (
         /* USER PROFILE SUB-TAB */

@@ -7,7 +7,6 @@ export default function AdminHeader({
   soundEnabled,
   setSoundEnabled,
   selectedGate,
-  setSelectedGate,
   offlineQueue,
   isSyncing
 }) {
@@ -40,16 +39,9 @@ export default function AdminHeader({
           {soundEnabled ? <Volume2 id="audio-icon" size={18} /> : <VolumeX id="audio-icon" size={18} />}
         </button>
 
-        <div className="select-wrapper">
+        <div className="static-gate-badge">
           <DoorOpen className="select-icon" size={16} />
-          <select value={selectedGate} onChange={(e) => setSelectedGate(e.target.value)}>
-            <option value="Gate A (Laki-laki)">Gate A (Laki-laki)</option>
-            <option value="Gate A (Perempuan)">Gate A (Perempuan)</option>
-            <option value="Gate B (Laki-laki)">Gate B (Laki-laki)</option>
-            <option value="Gate B (Perempuan)">Gate B (Perempuan)</option>
-            <option value="Gate C (Laki-laki)">Gate C (Laki-laki)</option>
-            <option value="Gate C (Perempuan)">Gate C (Perempuan)</option>
-          </select>
+          <span className="static-gate-text">{selectedGate}</span>
         </div>
 
         <div className={`sync-status-badge ${offlineQueue.length > 0 ? '' : 'hidden'} ${isSyncing ? 'syncing' : ''}`}>

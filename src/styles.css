@@ -3143,3 +3143,24 @@ button, input, select, textarea {
     padding: 12px;
     font-weight: 600;
 }
+
+/* Static Gate Badge (Non-interactive) */
+.static-gate-badge {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 10px 20px 10px 42px;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 14px;
+    user-select: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.static-gate-text {
+    color: var(--text-primary);
+    font-weight: 600;
+}
