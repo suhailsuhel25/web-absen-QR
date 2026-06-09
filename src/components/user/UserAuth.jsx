@@ -393,8 +393,8 @@ export default function UserAuth({
               rows={3}
               style={{
                 width: '100%',
-                background: 'var(--bg-elevated, #1a2340)',
-                border: '1px solid var(--border, #1e293b)',
+                background: 'var(--bg-input)',
+                border: '1px solid var(--border-color)',
                 borderRadius: '10px',
                 padding: '10px 14px',
                 color: 'var(--text-primary)',
@@ -412,10 +412,6 @@ export default function UserAuth({
           <button type="submit" className="btn btn-primary btn-block">Daftar Akun</button>
         </form>
       )}
-
-      <button className="btn-back-to-landing" onClick={onBackToLanding}>
-        <ArrowLeft size={16} style={{ marginRight: '6px' }} /> Kembali ke Menu Utama
-      </button>
     </div>
   );
 }

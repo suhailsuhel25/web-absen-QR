@@ -47,10 +47,6 @@ export default function UserHome({ currentUser, handleLogout }) {
         ctx.font = "bold 24px 'Plus Jakarta Sans', sans-serif";
         ctx.fillText("Matholek fest 2026", ticketCanvas.width / 2, 48);
 
-        ctx.font = "600 12px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillStyle = "#cbd5e1";
-        ctx.fillText("FESTIVAL ENTRY TICKET", ticketCanvas.width / 2, 74);
-
         // 3. Draw Ticket Info Section
         ctx.textAlign = "left";
         ctx.fillStyle = "#0f172a";
@@ -155,8 +151,7 @@ export default function UserHome({ currentUser, handleLogout }) {
           <div className="mobile-ticket">
             <div className="mobile-ticket-header">
               <div>
-                <span className="event-tag">FESTIVAL TICKET</span>
-                <h4 className="event-title">Matholek fest 2026</h4>
+                <h4 className="event-title">Matholek Fest 2026</h4>
               </div>
             </div>
 

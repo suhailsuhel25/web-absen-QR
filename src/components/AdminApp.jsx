@@ -6,6 +6,7 @@ import AdminScanner from './admin/AdminScanner';
 import AdminReports from './admin/AdminReports';
 import AdminGates from './admin/AdminGates';
 import GateSelectorModal from './admin/GateSelectorModal';
+import AdminAuth from './admin/AdminAuth';
 import { playSound } from '../App';
 
 export default function AdminApp({
@@ -29,9 +30,26 @@ export default function AdminApp({
   fetchDatabaseData,
   onLogoutAdmin
 }) {
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+    return localStorage.getItem("qrevent_admin_logged_in") === "true";
+  });
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'scanner', 'reports'
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showGateSelector, setShowGateSelector] = useState(true);
+
+  if (!isAdminLoggedIn) {
+    return (
+      <AdminAuth
+        supabase={supabase}
+        showToast={showToast}
+        onLoginSuccess={() => {
+          localStorage.setItem("qrevent_admin_logged_in", "true");
+          setIsAdminLoggedIn(true);
+        }}
+        onBackToLanding={onLogoutAdmin}
+      />
+    );
+  }
 
   // Core Check-In database and local state synchronization logic
   const handleCheckIn = async (tokenOrPhone, gate) => {
@@ -224,6 +242,12 @@ export default function AdminApp({
     }
   };
 
+  const handleAdminLogout = () => {
+    localStorage.removeItem("qrevent_admin_logged_in");
+    setIsAdminLoggedIn(false);
+    onLogoutAdmin();
+  };
+
   return (
     <div id="admin-app-container" className="app-container">
       <AdminSidebar
@@ -231,9 +255,7 @@ export default function AdminApp({
         setActiveTab={setActiveTab}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        isOnline={isOnline}
-        setIsOnline={setIsOnline}
-        onLogoutAdmin={onLogoutAdmin}
+        onLogoutAdmin={handleAdminLogout}
       />
 
       <main className="main-content">

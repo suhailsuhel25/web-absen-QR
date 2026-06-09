@@ -6,8 +6,6 @@ export default function AdminSidebar({
   setActiveTab,
   sidebarOpen,
   setSidebarOpen,
-  isOnline,
-  setIsOnline,
   onLogoutAdmin
 }) {
   return (
@@ -68,23 +66,6 @@ export default function AdminSidebar({
         </nav>
 
         <div className="sidebar-footer">
-          <div className="network-card">
-            <div className="network-status-header">
-              <span className={`status-indicator-dot ${isOnline ? 'online' : 'offline'}`}></span>
-              <span className="status-label">{isOnline ? 'Online Mode' : 'Offline Mode'}</span>
-            </div>
-            <p className="status-desc">Simulate offline state to test caching and auto-sync.</p>
-            <label className="switch-container">
-              <span className="switch-label">Offline Simulation</span>
-              <input 
-                type="checkbox" 
-                checked={!isOnline} 
-                onChange={(e) => setIsOnline(!e.target.checked)} 
-              />
-              <span className="switch-slider"></span>
-            </label>
-          </div>
-          
           <button className="btn btn-secondary btn-sm btn-icon" onClick={onLogoutAdmin}>
             <LogOut size={14} />
             <span>Keluar Admin</span>

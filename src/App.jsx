@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { CheckCircle, AlertTriangle, AlertCircle, Info, X } from 'lucide-react';
-import LandingScreen from './components/LandingScreen';
 import UserApp from './components/UserApp';
 import AdminApp from './components/AdminApp';
 
@@ -51,7 +50,18 @@ export const playSound = (type, soundEnabled) => {
 let supabaseInstance = null;
 
 export default function App() {
-  const [role, setRole] = useState('landing'); // 'landing', 'user', 'admin'
+  const [role, setRole] = useState(() => {
+    return window.location.pathname === '/admin' ? 'admin' : 'user';
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setRole(window.location.pathname === '/admin' ? 'admin' : 'user');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const [supabase, setSupabase] = useState(null);
   const [supabaseConfig, setSupabaseConfig] = useState({ url: '', key: '' });
   
@@ -478,7 +488,6 @@ export default function App() {
 
   return (
     <>
-      {role === 'landing' && <LandingScreen onSelectRole={setRole} />}
       {role === 'user' && (
         <UserApp 
           supabase={supabase} 
@@ -487,7 +496,6 @@ export default function App() {
           supabaseUser={supabaseUser}
           setSupabaseUser={setSupabaseUser}
           showToast={showToast}
-          onBackToLanding={() => setRole('landing')}
         />
       )}
       {role === 'admin' && (
@@ -510,7 +518,10 @@ export default function App() {
           setGatesList={setGatesList}
           showToast={showToast}
           fetchDatabaseData={fetchDatabaseData}
-          onLogoutAdmin={() => setRole('landing')}
+          onLogoutAdmin={() => {
+            window.history.pushState({}, '', '/');
+            setRole('user');
+          }}
         />
       )}
 

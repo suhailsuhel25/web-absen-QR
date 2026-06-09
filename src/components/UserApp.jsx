@@ -9,8 +9,7 @@ export default function UserApp({
   setCurrentUser, 
   supabaseUser, 
   setSupabaseUser, 
-  showToast, 
-  onBackToLanding 
+  showToast 
 }) {
   // Handle Logout
   const handleLogout = async () => {
@@ -38,7 +37,6 @@ export default function UserApp({
               setCurrentUser={setCurrentUser}
               setSupabaseUser={setSupabaseUser}
               showToast={showToast}
-              onBackToLanding={onBackToLanding}
             />
           ) : (
             <UserHome 

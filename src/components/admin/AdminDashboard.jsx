@@ -27,9 +27,9 @@ export default function AdminDashboard({
           labels: ["Checked In", "Belum Hadir"],
           datasets: [{
             data: [checkedInCount, remainingCount],
-            backgroundColor: ["#10b981", "#1e293b"],
+            backgroundColor: ["#026b2c", "#edf2f0"], // KMF deep green & light input bg
             borderWidth: 2,
-            borderColor: "#141c2f"
+            borderColor: "#ffffff" // Card white background
           }]
         },
         options: {
@@ -38,9 +38,9 @@ export default function AdminDashboard({
           plugins: {
             legend: {
               position: "bottom",
-              labels: { color: "#94a3b8", font: { family: "Plus Jakarta Sans", size: 10, weight: "600" }, padding: 10 }
+              labels: { color: "#4b5563", font: { family: "Plus Jakarta Sans", size: 10, weight: "600" }, padding: 10 }
             },
-            title: { display: true, text: "STATUS KEHADIRAN", color: "#f8fafc", font: { family: "Plus Jakarta Sans", size: 11, weight: "700" } }
+            title: { display: true, text: "STATUS KEHADIRAN", color: "#1f2937", font: { family: "Plus Jakarta Sans", size: 11, weight: "700" } }
           },
           cutout: "70%"
         }
@@ -78,13 +78,13 @@ export default function AdminDashboard({
           maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
-            title: { display: true, text: "VOLUME TICKETS PER PINTU", color: "#f8fafc", font: { family: "Plus Jakarta Sans", size: 11, weight: "700" } }
+            title: { display: true, text: "VOLUME TICKETS PER PINTU", color: "#1f2937", font: { family: "Plus Jakarta Sans", size: 11, weight: "700" } }
           },
           scales: {
-            x: { grid: { display: false }, ticks: { color: "#94a3b8", font: { family: "Plus Jakarta Sans", size: 9, weight: "600" } } },
+            x: { grid: { display: false }, ticks: { color: "#4b5563", font: { family: "Plus Jakarta Sans", size: 9, weight: "600" } } },
             y: { 
-              grid: { color: "#1e293b" }, 
-              ticks: { color: "#94a3b8", font: { family: "Plus Jakarta Sans", size: 9 }, stepSize: 1 },
+              grid: { color: "#dbe4e0" }, // Light sage border color
+              ticks: { color: "#4b5563", font: { family: "Plus Jakarta Sans", size: 9 }, stepSize: 1 },
               beginAtZero: true
             }
           }
