@@ -317,19 +317,29 @@ export default function App() {
       logsChannel = supabase.channel('schema-db-logs')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'check_in_logs' }, payload => {
           const newLog = payload.new;
-          setCheckInLogs(prev => [
-            {
-              id: newLog.id,
-              time: new Date(newLog.created_at).toLocaleString("id-ID"),
-              name: newLog.participant_name,
-              token: newLog.ticket_token,
-              gate: newLog.gate,
-              status: newLog.status,
-              details: newLog.details
-            },
-            ...prev
-          ]);
-          showToast("Scan Masuk Baru", `${newLog.participant_name} masuk melalui ${newLog.gate}.`, "success");
+          let isDuplicate = false;
+          setCheckInLogs(prev => {
+            const exists = prev.some(l => l.token === newLog.ticket_token && l.status === newLog.status);
+            if (exists) {
+              isDuplicate = true;
+              return prev.map(l => l.token === newLog.ticket_token && l.status === newLog.status ? { ...l, id: newLog.id } : l);
+            }
+            return [
+              {
+                id: newLog.id,
+                time: new Date(newLog.created_at).toLocaleString("id-ID"),
+                name: newLog.participant_name,
+                token: newLog.ticket_token,
+                gate: newLog.gate,
+                status: newLog.status,
+                details: newLog.details
+              },
+              ...prev
+            ];
+          });
+          if (!isDuplicate) {
+            showToast("Scan Masuk Baru", `${newLog.participant_name} masuk melalui ${newLog.gate}.`, "success");
+          }
         })
         .subscribe();
 

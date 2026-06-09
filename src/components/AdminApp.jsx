@@ -112,7 +112,7 @@ export default function AdminApp({
       try {
         if (supabase) {
           // Update profile in DB
-          await supabase.from('profiles')
+          const { error: updateError } = await supabase.from('profiles')
             .update({
               checked_in: true,
               check_in_time: timeString,
@@ -120,19 +120,60 @@ export default function AdminApp({
             })
             .eq('id', participant.id);
 
+          if (updateError) {
+            showToast("Gagal Check-in", `Gagal menyimpan kehadiran: ${updateError.message}`, "error");
+            return;
+          }
+
           // Add log
-          await supabase.from('check_in_logs').insert([{
+          const { error: insertError } = await supabase.from('check_in_logs').insert([{
             participant_name: participant.name,
             ticket_token: actualToken,
             gate: gate,
             status: "SUCCESS",
             details: `Check-in berhasil di ${gate}`
           }]);
+
+          if (insertError) {
+            console.error("Failed to log check-in to database:", insertError);
+          }
         }
+
+        // Update state locally immediately to prevent duplicate scans
+        setParticipants(prev => prev.map(p => {
+          if (p.id === participant.id) {
+            return {
+              ...p,
+              checked_in: true,
+              check_in_time: timeString,
+              check_in_gate: gate,
+              checkedIn: true,
+              checkInTime: timeString,
+              checkInGate: gate
+            };
+          }
+          return p;
+        }));
+
+        // Add to logs state locally immediately
+        setCheckInLogs(prev => [
+          {
+            id: Date.now(), // Temporary ID, will be mapped to DB ID by Realtime subscription
+            time: new Date(timeString).toLocaleString("id-ID"),
+            name: participant.name,
+            token: actualToken,
+            gate: gate,
+            status: "SUCCESS",
+            details: `Check-in berhasil di ${gate}`
+          },
+          ...prev
+        ]);
+
+        showToast("Check-in Sukses", `${participant.name} berhasil masuk.`, "success");
       } catch (err) {
         console.error("Failed to commit check-in online:", err);
+        showToast("Error Sistem", "Terjadi kesalahan internal saat check-in.", "error");
       }
-      showToast("Check-in Sukses", `${participant.name} berhasil masuk.`, "success");
     } else {
       // Offline cached simulation
       playSound("success", soundEnabled);
