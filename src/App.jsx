@@ -293,6 +293,8 @@ export default function App() {
         check_in_gate: p.check_in_gate,
         checkInGate: p.check_in_gate
       })));
+      console.log("Supabase fetch database data success. Profiles count:", profiles.length, profiles);
+      showToast("Data Diselaraskan", `Berhasil memuat ${profiles.length} data peserta dari database.`, "success");
 
       const { data: logs, error: errLogs } = await supabase
         .from('check_in_logs')

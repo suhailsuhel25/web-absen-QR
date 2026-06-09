@@ -62,11 +62,22 @@ export default function AdminApp({
     const cleanInput = tokenOrPhone.trim();
     if (!cleanInput) return;
 
+    console.log("handleCheckIn triggered with input:", cleanInput);
+    console.log("current participants state:", participants);
+
     // Search attendee in loaded state by token or phone number
     const participant = participants.find(p => p.token === cleanInput || p.phone === cleanInput);
 
     // 1. INVALID CODE ERROR
     if (!participant) {
+      // Prevent duplicate logging of same invalid ticket in DB
+      const alreadyLogged = checkInLogs.some(l => l.token === cleanInput && l.status === "ERROR");
+      if (alreadyLogged) {
+        playSound("error", soundEnabled);
+        showToast("Scan Error", "Identitas/No HP tidak terdaftar dan sudah di-scan sebelumnya.", "error");
+        return;
+      }
+
       playSound("error", soundEnabled);
       if (supabase) {
         try {
