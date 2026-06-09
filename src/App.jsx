@@ -175,8 +175,13 @@ export default function App() {
       if (key && key !== "PASTE_YOUR_SUPABASE_ANON_KEY_HERE") {
         try {
           if (!supabaseInstance) {
-            supabaseInstance = createClient(url, key);
-            console.log("Supabase Client initialized successfully.");
+            supabaseInstance = createClient(url, key, {
+              auth: {
+                storage: window.sessionStorage,
+                persistSession: true
+              }
+            });
+            console.log("Supabase Client initialized successfully with sessionStorage.");
           }
           setSupabase(supabaseInstance);
           setSupabaseConfig({ url, key });
@@ -214,7 +219,9 @@ export default function App() {
               check_in_time: profile.check_in_time,
               check_in_gate: profile.check_in_gate
             });
-            setRole('user');
+            if (window.location.pathname !== '/admin') {
+              setRole('user');
+            }
           }
         }
       } catch (err) {

@@ -61,7 +61,7 @@ export default function AdminAuth({ supabase, onLoginSuccess, onBackToLanding, s
         <div className="android-screen" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
           
           <div className="auth-header" style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <div style={{ display: 'inline-flex', padding: '16px', borderRadius: '16px', background: 'rgba(239, 68, 68, 0.1)', color: 'rgba(239, 68, 68, 1)', marginBottom: '16px' }}>
+            <div style={{ display: 'inline-flex', padding: '16px', borderRadius: '16px', background: 'var(--accent-glow, rgba(2, 107, 44, 0.08))', color: 'var(--accent, #026b2c)', marginBottom: '16px' }}>
               <ShieldAlert size={36} />
             </div>
             <h3 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--text-primary)', margin: '0 0 8px 0' }}>Portal Panitia / Admin</h3>
@@ -101,7 +101,7 @@ export default function AdminAuth({ supabase, onLoginSuccess, onBackToLanding, s
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary btn-block" disabled={isLoading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'var(--danger, #ef4444)', border: 'none' }}>
+            <button type="submit" className="btn btn-primary btn-block" disabled={isLoading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'var(--accent, #026b2c)', border: 'none' }}>
               {isLoading ? (
                 <span>Memproses...</span>
               ) : (

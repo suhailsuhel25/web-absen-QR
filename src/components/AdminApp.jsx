@@ -31,7 +31,7 @@ export default function AdminApp({
   onLogoutAdmin
 }) {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
-    return localStorage.getItem("qrevent_admin_logged_in") === "true";
+    return sessionStorage.getItem("qrevent_admin_logged_in") === "true";
   });
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'scanner', 'reports'
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function AdminApp({
         supabase={supabase}
         showToast={showToast}
         onLoginSuccess={() => {
-          localStorage.setItem("qrevent_admin_logged_in", "true");
+          sessionStorage.setItem("qrevent_admin_logged_in", "true");
           setIsAdminLoggedIn(true);
         }}
         onBackToLanding={onLogoutAdmin}
@@ -243,7 +243,7 @@ export default function AdminApp({
   };
 
   const handleAdminLogout = () => {
-    localStorage.removeItem("qrevent_admin_logged_in");
+    sessionStorage.removeItem("qrevent_admin_logged_in");
     setIsAdminLoggedIn(false);
     onLogoutAdmin();
   };

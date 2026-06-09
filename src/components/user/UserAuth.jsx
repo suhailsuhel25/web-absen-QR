@@ -96,8 +96,20 @@ export default function UserAuth({
       return;
     }
 
-    if (!regPhone.trim()) {
-      showToast("Validasi Error", "Nomor telepon wajib diisi.", "warning");
+    if (
+      !regPhone.trim() ||
+      !regEmail.trim() ||
+      !regPassword.trim() ||
+      !regName.trim() ||
+      !regBirthPlace.trim() ||
+      !regBirthDate.trim() ||
+      !regProvince.trim() ||
+      !regRegency.trim() ||
+      !regDistrict.trim() ||
+      !regVillage.trim() ||
+      !regAddress.trim()
+    ) {
+      showToast("Validasi Error", "Semua kolom pendaftaran wajib diisi.", "warning");
       return;
     }
 
@@ -243,7 +255,7 @@ export default function UserAuth({
 
           {/* 2. Email */}
           <div className="form-group">
-            <label>Alamat Email (Opsional)</label>
+            <label>Alamat Email</label>
             <div className="input-wrapper">
               <Mail className="input-icon" size={16} />
               <input
@@ -251,6 +263,7 @@ export default function UserAuth({
                 placeholder="email@domain.com"
                 value={regEmail}
                 onChange={(e) => setRegEmail(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -310,6 +323,7 @@ export default function UserAuth({
                 placeholder="Kota lahir"
                 value={regBirthPlace}
                 onChange={(e) => setRegBirthPlace(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -323,6 +337,7 @@ export default function UserAuth({
                 type="date"
                 value={regBirthDate}
                 onChange={(e) => setRegBirthDate(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -337,6 +352,7 @@ export default function UserAuth({
                 placeholder="Contoh: Jawa Barat"
                 value={regProvince}
                 onChange={(e) => setRegProvince(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -351,6 +367,7 @@ export default function UserAuth({
                 placeholder="Contoh: Kab. Bogor"
                 value={regRegency}
                 onChange={(e) => setRegRegency(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -365,6 +382,7 @@ export default function UserAuth({
                 placeholder="Nama kecamatan"
                 value={regDistrict}
                 onChange={(e) => setRegDistrict(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -379,6 +397,7 @@ export default function UserAuth({
                 placeholder="Nama desa/kelurahan"
                 value={regVillage}
                 onChange={(e) => setRegVillage(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -391,6 +410,7 @@ export default function UserAuth({
               value={regAddress}
               onChange={(e) => setRegAddress(e.target.value)}
               rows={3}
+              required
               style={{
                 width: '100%',
                 background: 'var(--bg-input)',
