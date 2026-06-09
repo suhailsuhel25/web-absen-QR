@@ -99,20 +99,8 @@ export default function AdminApp({
       const prevTime = participant.check_in_time || participant.checkInTime || "Baru saja";
 
       playSound("duplicate", soundEnabled);
-      if (supabase) {
-        try {
-          await supabase.from('check_in_logs').insert([{
-            participant_name: participant.name,
-            ticket_token: actualToken,
-            gate: gate,
-            status: "DUPLICATE",
-            details: `Percobaan scan ulang di ${gate}. Sebelumnya terdaftar di ${prevGate}.`
-          }]);
-        } catch (err) {
-          console.error("Failed to log duplicate check-in:", err);
-        }
-      }
-      showToast("Scan Ditolak", `Tiket ${participant.name} terdeteksi duplikat!`, "warning");
+      // Removed Supabase log insertion for duplicate scans to ensure only 1 scan log enters the database.
+      showToast("Sudah Di-scan", `Data sudah masuk. Tiket ${participant.name} sudah di-scan sebelumnya.`, "error");
       return;
     }
 

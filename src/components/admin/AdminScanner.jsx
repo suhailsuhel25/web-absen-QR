@@ -172,8 +172,8 @@ export default function AdminScanner({
         const prevTime = participant.check_in_time || participant.checkInTime || "Baru saja";
         setScanResult({
           status: 'duplicate',
-          title: 'Blocked (Duplikat)',
-          desc: `Tiket milik ${participant.name} sudah discan sebelumnya di ${prevGate} pada ${prevTime.includes('T') ? new Date(prevTime).toLocaleTimeString() : prevTime}.`
+          title: 'Sudah Di-scan',
+          desc: `Data sudah masuk.\nTiket milik ${participant.name} sudah discan sebelumnya di ${prevGate} pada ${prevTime.includes('T') ? new Date(prevTime).toLocaleTimeString() : prevTime}.`
         });
       } else {
         setScanResult({

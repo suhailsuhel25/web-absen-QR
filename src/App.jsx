@@ -416,14 +416,7 @@ export default function App() {
               .single();
             
             if (profile && profile.checked_in) {
-              // Sync conflict
-              await supabase.from('check_in_logs').insert([{
-                participant_name: item.name,
-                ticket_token: item.token,
-                gate: item.gate,
-                status: "DUPLICATE",
-                details: `SYNC CONFLICT: Tiket ganda disinkronkan dari offline.`
-              }]);
+              // Sync conflict - do not insert duplicate log row
               syncedConflictCount++;
             } else {
               // Sync check-in
