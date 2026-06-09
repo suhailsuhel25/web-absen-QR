@@ -1,0 +1,12 @@
+# Environment variables
+.env
+public/config.json
+
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+
+# Backups
+*.bak
