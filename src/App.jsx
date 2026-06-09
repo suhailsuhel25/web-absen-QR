@@ -360,24 +360,56 @@ export default function App() {
         })
         .subscribe();
 
-      // Subscribe to profiles updates
+      // Subscribe to profiles updates, inserts, and deletes
       profilesChannel = supabase.channel('schema-db-profiles')
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles' }, payload => {
-          const updatedProfile = payload.new;
-          setParticipants(prev => prev.map(p => {
-            if (p.id === updatedProfile.id) {
-              return {
-                ...p,
-                checked_in: updatedProfile.checked_in,
-                checkedIn: updatedProfile.checked_in,
-                check_in_time: updatedProfile.check_in_time,
-                checkInTime: updatedProfile.check_in_time,
-                check_in_gate: updatedProfile.check_in_gate,
-                checkInGate: updatedProfile.check_in_gate
-              };
-            }
-            return p;
-          }));
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, payload => {
+          if (payload.eventType === 'INSERT') {
+            const newProfile = payload.new;
+            setParticipants(prev => {
+              if (prev.some(p => p.id === newProfile.id)) return prev;
+              return [
+                ...prev,
+                {
+                  id: newProfile.id,
+                  name: newProfile.name,
+                  email: newProfile.email,
+                  token: newProfile.ticket_token,
+                  phone: newProfile.phone,
+                  gender: newProfile.gender,
+                  checked_in: newProfile.checked_in,
+                  checkedIn: newProfile.checked_in,
+                  check_in_time: newProfile.check_in_time,
+                  checkInTime: newProfile.check_in_time,
+                  check_in_gate: newProfile.check_in_gate,
+                  checkInGate: newProfile.check_in_gate
+                }
+              ];
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            const updatedProfile = payload.new;
+            setParticipants(prev => prev.map(p => {
+              if (p.id === updatedProfile.id) {
+                return {
+                  ...p,
+                  name: updatedProfile.name,
+                  email: updatedProfile.email,
+                  token: updatedProfile.ticket_token,
+                  phone: updatedProfile.phone,
+                  gender: updatedProfile.gender,
+                  checked_in: updatedProfile.checked_in,
+                  checkedIn: updatedProfile.checked_in,
+                  check_in_time: updatedProfile.check_in_time,
+                  checkInTime: updatedProfile.check_in_time,
+                  check_in_gate: updatedProfile.check_in_gate,
+                  checkInGate: updatedProfile.check_in_gate
+                };
+              }
+              return p;
+            }));
+          } else if (payload.eventType === 'DELETE') {
+            const deletedProfile = payload.old;
+            setParticipants(prev => prev.filter(p => p.id !== deletedProfile.id));
+          }
         })
         .subscribe();
     } else if (role === 'user' && currentUser) {

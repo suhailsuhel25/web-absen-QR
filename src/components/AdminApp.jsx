@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminSidebar from './admin/AdminSidebar';
 import AdminHeader from './admin/AdminHeader';
 import AdminDashboard from './admin/AdminDashboard';
@@ -36,6 +36,12 @@ export default function AdminApp({
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'scanner', 'reports'
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showGateSelector, setShowGateSelector] = useState(true);
+
+  useEffect(() => {
+    if (isAdminLoggedIn && fetchDatabaseData) {
+      fetchDatabaseData();
+    }
+  }, [isAdminLoggedIn]);
 
   if (!isAdminLoggedIn) {
     return (
