@@ -23,6 +23,16 @@ export default function AdminScanner({
     desc: 'Arahkan kamera ke QR tiket atau gunakan simulator.'
   });
 
+  // Refs to prevent stale closures in requestAnimationFrame loop
+  const handleCheckInRef = useRef(handleCheckIn);
+  const selectedGateRef = useRef(selectedGate);
+  const participantsRef = useRef(participants);
+
+  // Sync refs on every render
+  handleCheckInRef.current = handleCheckIn;
+  selectedGateRef.current = selectedGate;
+  participantsRef.current = participants;
+
   // Webcam scanning references
   const videoRef = useRef(null);
   const webcamCanvasRef = useRef(null);
@@ -138,20 +148,21 @@ export default function AdminScanner({
   };
 
   const triggerLocalCheckIn = async (token) => {
+    const cleanToken = token.trim();
     // Perform standard checkin which updates local state & DB
-    await handleCheckIn(token, selectedGate);
+    await handleCheckInRef.current(cleanToken, selectedGateRef.current);
     
     // Determine the result state by looking at participant list
-    const participant = participants.find(p => p.token === token.trim() || p.phone === token.trim());
+    const participant = participantsRef.current.find(p => p.token === cleanToken || p.phone === cleanToken);
     if (!participant) {
       setScanResult({
         status: 'error',
         title: 'Tiket Tidak Valid',
-        desc: `Token '${token}' tidak terdaftar di database.`
+        desc: `Token '${cleanToken}' tidak terdaftar di database.`
       });
     } else {
-      const isMaleGate = selectedGate.includes("(Laki-laki)");
-      const isFemaleGate = selectedGate.includes("(Perempuan)");
+      const isMaleGate = selectedGateRef.current.includes("(Laki-laki)");
+      const isFemaleGate = selectedGateRef.current.includes("(Perempuan)");
       const isGenderMismatch = participant.gender && (
         (participant.gender === "Laki-laki" && isFemaleGate) || 
         (participant.gender === "Perempuan" && isMaleGate)
@@ -161,14 +172,14 @@ export default function AdminScanner({
         setScanResult({
           status: 'error',
           title: 'Blocked (Salah Pintu)',
-          desc: `Gender Mismatch:\nPeserta (${participant.gender}) tidak boleh masuk lewat ${selectedGate}.`
+          desc: `Gender Mismatch:\nPeserta (${participant.gender}) tidak boleh masuk lewat ${selectedGateRef.current}.`
         });
         return;
       }
 
       const isAlreadyChecked = participant.checked_in || participant.checkInTime !== null;
       if (isAlreadyChecked) {
-        const prevGate = participant.check_in_gate || participant.checkInGate || selectedGate;
+        const prevGate = participant.check_in_gate || participant.checkInGate || selectedGateRef.current;
         const prevTime = participant.check_in_time || participant.checkInTime || "Baru saja";
         setScanResult({
           status: 'duplicate',
@@ -179,7 +190,7 @@ export default function AdminScanner({
         setScanResult({
           status: 'success',
           title: isOnline ? 'Check-in Berhasil' : 'Check-in Offline (Disimpan)',
-          desc: `Nama: ${participant.name}\nPintu: ${selectedGate}\nWaktu: ${new Date().toLocaleTimeString()}`
+          desc: `Nama: ${participant.name}\nPintu: ${selectedGateRef.current}\nWaktu: ${new Date().toLocaleTimeString()}`
         });
       }
     }
