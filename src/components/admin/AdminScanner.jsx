@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import jsQR from 'jsqr';
 import { 
-  Terminal, Camera, Key, Battery, Activity, ShieldCheck, Copy, ShieldAlert, 
+  Terminal, Camera, Key, Activity, ShieldCheck, Copy, ShieldAlert, 
   CameraOff, Video, X, Phone 
 } from 'lucide-react';
 import { playSound } from '../../App';
@@ -300,42 +300,20 @@ export default function AdminScanner({
                   </div>
                 </div>
                 
-                <div className="simulator-device-mockup">
-                  <div className="phone-frame">
-                    <div className="phone-notch"></div>
-                    <div className="phone-screen">
-                      <div className="phone-header">
-                        <span className="phone-time">13:45</span>
-                        <div className="phone-icons">
-                          <span className={`status-indicator-dot ${isOnline ? 'online' : 'offline'}`} style={{ width: '6px', height: '6px', marginRight: '6px' }}></span>
-                          <Battery size={10} />
-                        </div>
-                      </div>
-                      
-                      <div className="phone-app">
-                        <div className="phone-app-header">
-                          <span className="phone-gate-name">{selectedGate}</span>
-                        </div>
-                        
-                        <div className="scanner-viewfinder">
-                          <div className="viewfinder-box animate-pulse-border"></div>
-                          <div className="laser-scanner-line"></div>
-                          <div className="viewfinder-text">Pindai QR Code Tiket</div>
-                        </div>
-                        
-                        <div className={`phone-result-card ${scanResult.status}`} id="phone-scan-result">
-                          <div className="result-status-icon">
-                            {scanResult.status === 'idle' && <Activity size={18} />}
-                            {scanResult.status === 'success' && <ShieldCheck size={18} />}
-                            {scanResult.status === 'duplicate' && <Copy size={18} />}
-                            {scanResult.status === 'error' && <ShieldAlert size={18} />}
-                          </div>
-                          <div className="result-details">
-                            <h4>{scanResult.title}</h4>
-                            <p style={{ whiteSpace: 'pre-line' }}>{scanResult.desc}</p>
-                          </div>
-                        </div>
-                      </div>
+                <div className="simulator-result-panel">
+                  <h4>Hasil Scan Simulator</h4>
+                  <p className="subtext" style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '16px' }}>Status dan data check-in dari scan terakhir.</p>
+                  
+                  <div className={`phone-result-card ${scanResult.status}`} id="phone-scan-result" style={{ margin: 0, width: '100%' }}>
+                    <div className="result-status-icon">
+                      {scanResult.status === 'idle' && <Activity size={18} />}
+                      {scanResult.status === 'success' && <ShieldCheck size={18} />}
+                      {scanResult.status === 'duplicate' && <Copy size={18} />}
+                      {scanResult.status === 'error' && <ShieldAlert size={18} />}
+                    </div>
+                    <div className="result-details">
+                      <h4>{scanResult.title}</h4>
+                      <p style={{ whiteSpace: 'pre-line' }}>{scanResult.desc}</p>
                     </div>
                   </div>
                 </div>

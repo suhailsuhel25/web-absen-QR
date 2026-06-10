@@ -1,5 +1,4 @@
 import React from 'react';
-import UserStatusBar from './user/UserStatusBar';
 import UserAuth from './user/UserAuth';
 import UserHome from './user/UserHome';
 
@@ -29,7 +28,6 @@ export default function UserApp({
     <div id="user-app-container" className="user-app-container">
       <div className="android-device">
         <div className="android-screen">
-          <UserStatusBar />
           
           {!currentUser ? (
             <UserAuth 
